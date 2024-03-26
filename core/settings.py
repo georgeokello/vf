@@ -1,5 +1,6 @@
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +15,19 @@ SECRET_KEY = 'django-insecure-vs-gt-ki49s+&s38ihhy%w0l98bdcch1@)ahpn-(tqay8zrlo=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['161.97.81.168']
+ALLOWED_HOSTS = ['*']
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost',
+    'http://localhost:3000',
+    'http://127.0.0.1',
+    'http://0.0.0.0',
+    'http://192.168.251.218:3000',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+APPEND_SLASH=False
 
 
 # Application definition
@@ -115,6 +128,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+# settings.py
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

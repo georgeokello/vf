@@ -5,13 +5,16 @@ from baseApp.models import FundiUser, Topic, Session, Activity
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = FundiUser
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'school', 'subject', 'classTaught']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = FundiUser(
             username=validated_data['username'],
-            email=validated_data['email']
+            email=validated_data['email'],
+            school=validated_data['school'],
+            subject=validated_data['subject'],
+            classTaught=validated_data['classTaught']
         )
         user.set_password(validated_data['password'])
         user.save()

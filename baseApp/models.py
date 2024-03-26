@@ -7,6 +7,8 @@ class FundiUser(AbstractUser):
 
     # Add custom fields here, if needed
     school = models.CharField(max_length=200)
+    subject = models.CharField(max_length=200)
+    classTaught = models.CharField(max_length=200)
     def __str__(self):
         return self.username
 
