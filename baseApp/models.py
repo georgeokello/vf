@@ -60,6 +60,7 @@ class TextActivity(models.Model):
 
 
 class VideoActivity(models.Model):
+    video_or_image_name = models.CharField(max_length=1500)
     activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
     video_or_image = models.FileField(upload_to='uploaded_files')
     time = models.TimeField()
