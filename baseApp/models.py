@@ -67,4 +67,4 @@ class VideoActivity(models.Model):
     date_created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.video_or_image
+        return self.video_or_image_name
