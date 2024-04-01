@@ -56,7 +56,7 @@ class TextActivity(models.Model):
     date_created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.activity_text
+        return self.teacherActivity
 
 
 class VideoActivity(models.Model):
@@ -66,4 +66,4 @@ class VideoActivity(models.Model):
     date_created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.activity_video_url
+        return self.video_or_image
