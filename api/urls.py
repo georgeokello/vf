@@ -13,7 +13,7 @@ urlpatterns = [
     # session
     # path('', views.viewTools),
     path('addSession/', views.addSession),
-    path('getSession/<int:id>', views.getSession),
+    path('getSession/<int:pk>', views.getSession),
     path('updateSession/<int:id>', views.updateSession),
     path('deleteSession/<int:id>', views.deleteSession),
     # activity

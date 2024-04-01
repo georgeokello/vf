@@ -79,15 +79,16 @@ def addSession(request):
 
 
 @api_view(['GET'])
-def getSession(request, id):
+def getSession(request, pk):
     try:
-        session = Session.objects.get(pk=id)
+        sessions = Session.objects.filter(topic_id=pk)
     except Session.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = SessionSerializer(session)
+        serializer = SessionSerializer(sessions, many=True)
         return Response(serializer.data)
+
 
 
 @api_view(['PUT'])

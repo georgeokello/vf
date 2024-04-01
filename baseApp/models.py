@@ -15,6 +15,8 @@ class FundiUser(AbstractUser):
 
 class Topic(models.Model):
     topicName = models.CharField(max_length=200)
+    subject = models.CharField(max_length=200)
+    classTaught = models.CharField(max_length=200)
     dateCreated = models.DateField(auto_now=True)
 
 
@@ -24,11 +26,43 @@ class Session(models.Model):
     dateCreated = models.DateField(auto_now=True)
 
 
+# class Activity(models.Model):
+#     activityName = models.CharField(max_length=200)
+#     session = models.ForeignKey(Session, on_delete=models.CASCADE)
+#     time = models.TimeField()
+#     teacherActivity = models.CharField(max_length=1500)
+#     studentActivity = models.CharField(max_length=1500)
+#     notes = models.CharField(max_length=1500, null=True, blank=True)
+#     date_created = models.DateTimeField(auto_now=True)
+
+    
+# new implementation.
+
 class Activity(models.Model):
-    activityName = models.CharField(max_length=200)
+    activity_name = models.CharField(max_length=255)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.activity_name
+
+
+class TextActivity(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     time = models.TimeField()
     teacherActivity = models.CharField(max_length=1500)
     studentActivity = models.CharField(max_length=1500)
     notes = models.CharField(max_length=1500, null=True, blank=True)
     date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.activity_text
+
+
+class VideoActivity(models.Model):
+    activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
+    video_or_image = models.FileField(upload_to='uploaded_files')
+    date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.activity_video_url
