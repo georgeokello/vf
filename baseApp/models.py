@@ -62,6 +62,7 @@ class TextActivity(models.Model):
 class VideoActivity(models.Model):
     activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
     video_or_image = models.FileField(upload_to='uploaded_files')
+    time = models.TimeField()
     date_created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
