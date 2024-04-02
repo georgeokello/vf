@@ -86,23 +86,23 @@ AUTH_USER_MODEL = 'baseApp.FundiUser'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'fbapplied_virtual_fundi',
-#         'USER': 'fbapplied_virtual_fundi',
-#         'PASSWORD': 'BBG;%yKAEHTA',
-#         'HOST': 'https://host.fbappliedscience.com:2083/',   # or your MySQL host if different
-#         'PORT': '',            # leave blank for default
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fbapplied_virtual_fundi',
+        'USER': 'fbapplied_virtual_fundi',
+        'PASSWORD': 'BBG;%yKAEHTA',
+        'HOST': 'host.fbappliedscience.com',   # or your MySQL host if different
+        'PORT': '',            # leave blank for default
+    }
+}
 
 
 
