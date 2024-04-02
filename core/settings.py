@@ -93,6 +93,18 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'fbapplied_virtual_fundi',
+#         'USER': 'fbapplied_virtual_fundi',
+#         'PASSWORD': 'BBG;%yKAEHTA',
+#         'HOST': 'https://host.fbappliedscience.com:2083/',   # or your MySQL host if different
+#         'PORT': '',            # leave blank for default
+#     }
+# }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
