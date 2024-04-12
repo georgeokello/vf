@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from baseApp.models import FundiUser, Topic, Session, Activity
+from baseApp.models import FundiUser, Topic, Session, Activity, TextActivity, VideoActivity
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,4 +36,15 @@ class SessionSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
+        fields = "__all__"
+
+
+class TextActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextActivity
+        fields = "__all__"
+
+class VideoActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoActivity
         fields = "__all__"

@@ -1,16 +1,18 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from baseApp.models import FundiUser, Topic, Session, Activity
-from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer
+from baseApp.models import FundiUser, Topic, Session, Activity, TextActivity, VideoActivity
+from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer, TextActivitySerializer, VideoActivitySerializer
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.decorators import login_required
 
 
 # Topic endpoints
 @api_view(['GET'])
+# @permission_classes([IsAuthenticated])  # Requires authentication
 def viewTopic(request):
     topics = Topic.objects.all()
     serializer = TopicSerializer(topics, many=True)
@@ -79,7 +81,7 @@ def addSession(request):
 
 
 @api_view(['GET'])
-def getSession(request, pk):
+def viewSessions(request, pk):
     try:
         sessions = Session.objects.filter(topic_id=pk)
     except Session.DoesNotExist:
@@ -89,6 +91,17 @@ def getSession(request, pk):
         serializer = SessionSerializer(sessions, many=True)
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+def getSession(request, id):
+    try:
+        session = Session.objects.get(pk=id)
+    except Session.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SessionSerializer(session)
+        return Response(serializer.data)
 
 
 @api_view(['PUT'])
@@ -137,6 +150,18 @@ def getActivity(request, id):
         return Response(serializer.data)
 
 
+@api_view(['GET'])
+def viewActivities(request, pk):
+    try:
+        activities = Activity.objects.filter(session_id=pk).select_related('session__topic')
+    except Activity.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['PUT'])
 def updateActivity(request, id):
     try:
@@ -161,6 +186,51 @@ def deleteActivity(request, id):
     activity.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['POST'])
+def addTextActivity(request):
+    if request.method == 'POST':
+        serializer = TextActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def viewTextActivities(request, pk):
+    try:
+        textActivities = TextActivity.objects.filter(activity_id=pk)
+    except TextActivity.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = TextActivitySerializer(textActivities, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def viewVideoActivities(request, pk):
+    try:
+        videoActivities = VideoActivity.objects.filter(activity_id=pk)
+    except VideoActivity.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = VideoActivitySerializer(videoActivities, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['POST'])
+def addVideoActivity(request):
+    if request.method == 'POST':
+        serializer = VideoActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

@@ -13,15 +13,22 @@ urlpatterns = [
     # session
     # path('', views.viewTools),
     path('addSession/', views.addSession),
-    path('getSession/<int:pk>', views.getSession),
+    path('getSession/<int:id>', views.getSession),
+    path('viewSessions/<int:pk>', views.viewSessions),
     path('updateSession/<int:id>', views.updateSession),
     path('deleteSession/<int:id>', views.deleteSession),
     # activity
     # path('', views.viewTools),
     path('addActivity/', views.addActivity),
+    path('viewActivities/<int:pk>', views.viewActivities),
     path('getActivity/<int:id>', views.getActivity),
     path('updateActivity/<int:id>', views.updateActivity),
     path('deleteActivity/<int:id>', views.deleteActivity),
+
+    path('addTextActivity/', views.addTextActivity),
+    path('viewTextActivities/<int:pk>', views.viewTextActivities),
+    path('addVideoActivity/', views.addVideoActivity),
+    path('viewVideoActivity/<int:pk>', views.viewVideoActivities),
 
     # path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
     # path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),

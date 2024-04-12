@@ -26,18 +26,6 @@ class Session(models.Model):
     dateCreated = models.DateField(auto_now=True)
 
 
-# class Activity(models.Model):
-#     activityName = models.CharField(max_length=200)
-#     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-#     time = models.TimeField()
-#     teacherActivity = models.CharField(max_length=1500)
-#     studentActivity = models.CharField(max_length=1500)
-#     notes = models.CharField(max_length=1500, null=True, blank=True)
-#     date_created = models.DateTimeField(auto_now=True)
-
-    
-# new implementation.
-
 class Activity(models.Model):
     activity_name = models.CharField(max_length=255)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
@@ -49,7 +37,7 @@ class Activity(models.Model):
 
 class TextActivity(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    time = models.TimeField()
+    time = models.IntegerField(null=True, blank=True)
     teacherActivity = models.CharField(max_length=1500)
     studentActivity = models.CharField(max_length=1500)
     notes = models.CharField(max_length=1500, null=True, blank=True)
@@ -63,7 +51,7 @@ class VideoActivity(models.Model):
     video_or_image_name = models.CharField(max_length=1500)
     activity = models.OneToOneField(Activity, on_delete=models.CASCADE)
     video_or_image = models.FileField(upload_to='uploaded_files')
-    time = models.TimeField()
+    time = models.IntegerField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
