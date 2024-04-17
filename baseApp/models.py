@@ -15,6 +15,9 @@ class FundiUser(AbstractUser):
 
 class Topic(models.Model):
     topicName = models.CharField(max_length=200)
+    topicCode = models.CharField(max_length=200, default="")
+    term = models.CharField(max_length=200, default="Term I")
+    cat = models.CharField(max_length=200, default="")
     subject = models.CharField(max_length=200)
     classTaught = models.CharField(max_length=200)
     dateCreated = models.DateField(auto_now=True)
@@ -23,6 +26,9 @@ class Topic(models.Model):
 class Session(models.Model):
     sessionName = models.CharField(max_length=200)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    topicCode = models.CharField(max_length=200, default="")
+    duration = models.CharField(max_length=200, default="60")
+    learningObjective = models.CharField(max_length=1000, default="")
     dateCreated = models.DateField(auto_now=True)
 
 
@@ -56,3 +62,13 @@ class VideoActivity(models.Model):
 
     def __str__(self):
         return self.video_or_image_name
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(FundiUser, null=True, on_delete=models.CASCADE, related_name='teacher_feedback')
+    term = models.CharField(max_length=200, default="Term I")
+    cat = models.CharField(max_length=200, default="")
+    subject = models.CharField(max_length=200)
+    classTaught = models.CharField(max_length=200)
+    feedback = models.CharField(max_length=1000)
+    dateCreated = models.DateField(auto_now=True)

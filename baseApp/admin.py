@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import FundiUser, Topic, Session, Activity, TextActivity, VideoActivity
+from . models import FundiUser, Topic, Session, Activity, TextActivity, VideoActivity, Feedback
 
 # Register your models here.
 
@@ -9,4 +9,5 @@ admin.site.register(Session)
 admin.site.register(Activity)
 admin.site.register(TextActivity)
 admin.site.register(VideoActivity)
+admin.site.register(Feedback)
 

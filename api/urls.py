@@ -4,31 +4,36 @@ from . import views
 
 
 urlpatterns = [
-    # topic
+    # topic endpoints
     path('', views.viewTopic),
     path('addTopic/', views.addTopic),
+    path('viewSecTopics/', views.viewSecTopics),
+    path('viewPriTopics/', views.viewPriTopics),
     path('getTopic/<int:id>', views.getTopic),
     path('updateTopic/<int:id>', views.updateTopic),
     path('deleteTopic/<int:id>', views.deleteTopic),
-    # session
-    # path('', views.viewTools),
+    # session endpoints
     path('addSession/', views.addSession),
     path('getSession/<int:id>', views.getSession),
     path('viewSessions/<int:pk>', views.viewSessions),
     path('updateSession/<int:id>', views.updateSession),
     path('deleteSession/<int:id>', views.deleteSession),
-    # activity
-    # path('', views.viewTools),
+    # activity endpoints
     path('addActivity/', views.addActivity),
     path('viewActivities/<int:pk>', views.viewActivities),
     path('getActivity/<int:id>', views.getActivity),
     path('updateActivity/<int:id>', views.updateActivity),
     path('deleteActivity/<int:id>', views.deleteActivity),
-
+    # text activity endpoints
     path('addTextActivity/', views.addTextActivity),
     path('viewTextActivities/<int:pk>', views.viewTextActivities),
+    path('deleteTextActivity/<int:pk>', views.deleteTextActivity),
+    path('updateTextActivity/<int:pk>', views.updateTextActivity),
+    # video activity endpoints
     path('addVideoActivity/', views.addVideoActivity),
     path('viewVideoActivity/<int:pk>', views.viewVideoActivities),
+    path('deleteVideoActivity/<int:pk>', views.deleteVideoActivity),
+    path('updateVideoActivity/<int:pk>', views.updateVideoActivity),
 
     # path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
     # path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
@@ -36,4 +41,9 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
+
+
+    # feedback endpoints
+    path('addFeedback', views.addFeedback, name='addFeedback'),
+    path('viewFeedback', views.viewFeedback, name='viewFeedback'),
 ]
