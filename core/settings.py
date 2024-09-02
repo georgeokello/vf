@@ -18,9 +18,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:5000',
-    'http://192.168.251.218:3000',  
+      'http://fbappliedscience.com'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
