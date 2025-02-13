@@ -1,5 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
+from PIL import Image
+from django.db.models.signals import post_save
+from django.contrib.auth.signals import user_logged_in
+from django.core.files.storage import default_storage as storage
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class FundiUser(AbstractUser):
@@ -10,6 +16,42 @@ class FundiUser(AbstractUser):
     # classTaught = models.CharField(max_length=200)
     def __str__(self):
         return self.username
+    
+    
+
+class Profile(models.Model):
+    user = models.OneToOneField(FundiUser, on_delete=models.CASCADE)
+    image = models.ImageField(default='default.PNG',null=True, blank=True, upload_to='profile_pics')
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+   
+
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+
+        # img = Image.open(self.image.name)
+        img = Image.open(storage.open(self.image.path))
+        
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.name)
+    
+
+
+
+@receiver(post_save, sender=FundiUser)
+def create_profile(sender, created, instance, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
+
+
+@receiver(user_logged_in, sender=FundiUser)
+def ensure_profile_exists(sender, request, user, **kwargs):
+    # Ensure the Profile exists
+    Profile.objects.get_or_create(user=user)
 
 
 class Topic(models.Model):
@@ -51,40 +93,6 @@ class Activity(models.Model):
     def __str__(self):
         return self.title
 
-# class Text(models.Model):
-#     activity = models.OneToOneField(Activity, on_delete=models.CASCADE, related_name='text')
-#     time = models.IntegerField(null=True, blank=True)
-#     mediaType = models.CharField(max_length=255, default="", null=True, blank=True)
-#     teacherActivity = models.CharField(max_length=1500)
-#     studentActivity = models.CharField(max_length=1500)
-#     notes = models.CharField(max_length=1500, null=True, blank=True)
-#     date_created = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.teacherActivity
-
-# class Image(models.Model):
-#     activity = models.OneToOneField(Activity, on_delete=models.CASCADE, related_name='image')
-#     image = models.ImageField(upload_to='images/')
-#     mediaType = models.CharField(max_length=255, default="", null=True, blank=True)
-#     image_title = models.CharField(max_length=1500)
-#     time = models.IntegerField(null=True, blank=True)
-#     date_created = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.image_title
-
-# class Video(models.Model):
-#     activity = models.OneToOneField(Activity, on_delete=models.CASCADE, related_name='video')
-#     video = models.FileField(upload_to='videos/')
-#     mediaType = models.CharField(max_length=255, default="", null=True, blank=True)
-#     video_title = models.CharField(max_length=1500)
-#     time = models.IntegerField(null=True, blank=True)
-#     date_created = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.video_title
-
 
 class Teachers(models.Model):
     schoolName = models.CharField(max_length=200, default="")
@@ -125,10 +133,3 @@ class Chapters(models.Model):
     sub_theme = models.ForeignKey(Sub_Theme, null=True, on_delete=models.CASCADE, related_name="chapter_subTheme")
     article = models.FileField(upload_to='Articles/', null=True, blank=True, default=None)
     date_created =  models.DateField(auto_now=True)
-
-
-# class Article(models.Model):
-#     title = models.CharField(max_length=200)
-#     chapter =  models.ForeignKey(Chapters, null=True, on_delete=models.Case, related_name="article")
-    
-#     created = models.DateField(auto_now=True)

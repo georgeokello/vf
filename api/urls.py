@@ -44,14 +44,17 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
 
+    # user 
+    path('getProfile/', views.getProfile, name='UserProfile'),
+
 
     # feedback endpoints
     path('addFeedback', views.addFeedback, name='addFeedback'),
     path('viewFeedback', views.viewFeedback, name='viewFeedback'),
 
     # teachers 
-    path('addTeacher', views.add_teacher, name="addTeacher"),
-    path('viewTeachers', views.view_teachers, name="viewTeachers"),
+    path('addTeacher/', views.add_teacher, name="addTeacher"),
+    path('viewTeachers/', views.view_teachers, name="viewTeachers"),
     path('updateTeacher/<int:id>', views.update_teacher, name="updateTeacher"),
     path('deleteTeacher/<int:id>', views.delete_teacher, name="deleteTeacher"),
 

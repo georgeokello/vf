@@ -1,15 +1,16 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from baseApp.models import FundiUser, Topic, Session, Activity, Feedback, Teachers
+from baseApp.models import FundiUser, Topic, Session, Activity, Feedback, Teachers, Profile
 from baseApp.models import Theme, Sub_Theme, Chapters
 from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer, FeedbackSerializer, TeacherSerializer
-from . serializer import ThemeSerializer, SubThemeSerializer, ChapterSerialzer
+from . serializer import ThemeSerializer, SubThemeSerializer, ChapterSerialzer, ProfileSerializer
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 
 # Topic endpoints
@@ -236,6 +237,21 @@ def updateVideoActivity(request, pk):
     pass
 
 
+@api_view(['GET'])
+def getProfile(request):
+    # check if user is authenticate 
+    if not request.user.is_authenticated:
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if request.method == 'GET':
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+    
+
+
 @api_view(['POST'])
 def login(request):
 
@@ -258,7 +274,6 @@ def login(request):
             return Response({'token': token.key}, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 @api_view(['POST'])
@@ -312,6 +327,7 @@ def viewFeedback(request):
 
 # Teachers endpoint
 # add teacher
+@api_view(['POST'])
 def add_teacher(request):
     if request.method == "POST":
         serializer = TeacherSerializer(data=request.data)

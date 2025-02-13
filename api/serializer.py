@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from baseApp.models import FundiUser, Topic, Session, Activity, Feedback, Teachers
+from baseApp.models import FundiUser, Topic, Session, Activity, Feedback, Teachers, Profile
 from baseApp.models import Theme, Sub_Theme, Chapters
 
 
@@ -20,6 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+    
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"
     
 
 class TopicSerializer(serializers.ModelSerializer):

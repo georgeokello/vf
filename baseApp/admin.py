@@ -1,6 +1,6 @@
 from django.contrib import admin
 from . models import FundiUser, Topic, Session, Activity,  Feedback, Teachers
-from . models import Theme, Sub_Theme, Chapters
+from . models import Theme, Sub_Theme, Chapters, Profile
 
 # Register your models here.
 
@@ -13,5 +13,6 @@ admin.site.register(Feedback)
 admin.site.register(Theme)
 admin.site.register(Sub_Theme)
 admin.site.register(Chapters)
+admin.site.register(Profile)
 
 
