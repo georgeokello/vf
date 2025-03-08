@@ -1,9 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from baseApp.models import FundiUser, Topic, Session, Activity, Feedback, Teachers, Profile
+from baseApp.models import FundiUser, Topic, Session, Activity, Teachers, Profile
 from baseApp.models import Theme, Sub_Theme, Chapters
-from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer, FeedbackSerializer, TeacherSerializer
+from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer, TeacherSerializer
 from . serializer import ThemeSerializer, SubThemeSerializer, ChapterSerialzer, ProfileSerializer
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
@@ -301,28 +301,29 @@ def logout(request):
 
 # feedback endpoints
  
-@api_view(['POST'])
-def addFeedback(request):
-     if request.method == 'POST':
-        serializer = FeedbackSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# @api_view(['POST'])
+# def addFeedback(request):
+#      if request.method == 'POST':
+#         serializer = FeedbackSerializer(data=request.data)
+#         print(serializer)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# video activity endpoints
-@api_view(['GET'])
-def viewFeedback(request):
-    try:
-        teacher_feedback = Feedback.objects.all()
-    except Feedback.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+# # view feedback endpoints
+# @api_view(['GET'])
+# def viewFeedback(request):
+#     try:
+#         teacher_feedback = Feedback.objects.all()
+#     except Feedback.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = FeedbackSerializer(teacher_feedback, many=True)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         serializer = FeedbackSerializer(teacher_feedback, many=True)
+#         return Response(serializer.data)
 
 
 # Teachers endpoint
@@ -371,6 +372,8 @@ def delete_teacher(request, id):
     
     teacher.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 # DEAR day

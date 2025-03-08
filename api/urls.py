@@ -49,8 +49,8 @@ urlpatterns = [
 
 
     # feedback endpoints
-    path('addFeedback', views.addFeedback, name='addFeedback'),
-    path('viewFeedback', views.viewFeedback, name='viewFeedback'),
+    # path('addFeedback', views.addFeedback, name='addFeedback'),
+    # path('viewFeedback', views.viewFeedback, name='viewFeedback'),
 
     # teachers 
     path('addTeacher/', views.add_teacher, name="addTeacher"),

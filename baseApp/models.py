@@ -101,16 +101,6 @@ class Teachers(models.Model):
     phoneName = models.CharField(max_length=200, default="")
 
 
-class Feedback(models.Model):
-    user = models.ForeignKey(FundiUser, null=True, on_delete=models.CASCADE, related_name='teacher_feedback')
-    term = models.CharField(max_length=200, default="Term I")
-    cat = models.CharField(max_length=200, default="")
-    subject = models.CharField(max_length=200)
-    classTaught = models.CharField(max_length=200)
-    feedback = models.CharField(max_length=1000)
-    dateCreated = models.DateField(auto_now=True)
-
-
 # DEAR day 
 class Theme(models.Model):
     title =  models.CharField(max_length=200)
