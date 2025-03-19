@@ -1,9 +1,9 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
-from baseApp.models import FundiUser, Topic, Session, Activity, Teachers, Profile
+from baseApp.models import FundiUser, Topic, Session, Activity, Teachers, Profile, Feedback
 from baseApp.models import Theme, Sub_Theme, Chapters
-from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer, TeacherSerializer
+from . serializer import UserSerializer, TopicSerializer, SessionSerializer, ActivitySerializer, TeacherSerializer, FeedbackSerializer
 from . serializer import ThemeSerializer, SubThemeSerializer, ChapterSerialzer, ProfileSerializer
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,27 +11,37 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from .authentication import CustomTokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework.permissions import AllowAny
 
 
 # Topic endpoints
+
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])  # Requires authentication
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication])
+@permission_classes([AllowAny])
 def viewTopic(request):
     topics = Topic.objects.all()
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data)
-
+    
 
 # Topic endpoints
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 # @permission_classes([IsAuthenticated])  # Requires authentication
 def viewSecTopics(request):
     topics = Topic.objects.filter(cat='Secondary')
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data)
 
+
 # Topic endpoints
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 # @permission_classes([IsAuthenticated])  # Requires authentication
 def viewPriTopics(request):
     topics = Topic.objects.filter(cat='Primary')
@@ -40,6 +50,8 @@ def viewPriTopics(request):
 
 
 @api_view(['POST'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def addTopic(request):
     serializer = TopicSerializer(data=request.data)
     if serializer.is_valid():
@@ -48,6 +60,8 @@ def addTopic(request):
 
 
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def getTopic(request, id):
     try:
         topic = Topic.objects.get(pk=id)
@@ -60,6 +74,8 @@ def getTopic(request, id):
 
 
 @api_view(['PUT'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def updateTopic(request, id):
     try:
         topic = Topic.objects.get(pk=id)
@@ -75,6 +91,8 @@ def updateTopic(request, id):
 
 
 @api_view(['DELETE'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def deleteTopic(request, id):
     try:
         tool = Topic.objects.get(pk=id)
@@ -84,8 +102,11 @@ def deleteTopic(request, id):
     tool.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # Session endpoints
 @api_view(['POST'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def addSession(request):
     serializer = SessionSerializer(data=request.data)
     if serializer.is_valid():
@@ -94,6 +115,8 @@ def addSession(request):
 
 
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def viewSessions(request, pk):
     try:
         sessions = Session.objects.filter(topic_id=pk)
@@ -106,6 +129,8 @@ def viewSessions(request, pk):
 
 
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def getSession(request, id):
     try:
         session = Session.objects.get(pk=id)
@@ -118,6 +143,8 @@ def getSession(request, id):
 
 
 @api_view(['PUT'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def updateSession(request, id):
     try:
         session = Session.objects.get(pk=id)
@@ -133,6 +160,8 @@ def updateSession(request, id):
 
 
 @api_view(['DELETE'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def deleteSession(request, id):
     try:
         session = Session.objects.get(pk=id)
@@ -145,6 +174,8 @@ def deleteSession(request, id):
 
 # Activity endpoints
 @api_view(['POST'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def addActivity(request):
     serializer = ActivitySerializer(data=request.data)
     if serializer.is_valid():
@@ -153,6 +184,8 @@ def addActivity(request):
 
 
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def getActivity(request, id):
     try:
         activity = Activity.objects.get(pk=id)
@@ -165,6 +198,8 @@ def getActivity(request, id):
 
 
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def viewActivities(request, pk):
     try:
         activities = Activity.objects.filter(session_id=pk).select_related('session__topic')
@@ -177,6 +212,8 @@ def viewActivities(request, pk):
 
 
 @api_view(['PUT'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def updateActivity(request, id):
     try:
         activity = Activity.objects.get(pk=id)
@@ -191,6 +228,8 @@ def updateActivity(request, id):
 
 
 @api_view(['DELETE'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def deleteActivity(request, id):
     try:
         activity = Activity.objects.get(pk=id)
@@ -201,6 +240,9 @@ def deleteActivity(request, id):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['POST'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def upload_activity(request):
     if request.method == 'POST':
         media_type = request.POST.get('mediaType')
@@ -301,34 +343,40 @@ def logout(request):
 
 # feedback endpoints
  
-# @api_view(['POST'])
-# def addFeedback(request):
-#      if request.method == 'POST':
-#         serializer = FeedbackSerializer(data=request.data)
-#         print(serializer)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
+def addFeedback(request):
+     if request.method == 'POST':
+        serializer = FeedbackSerializer(data=request.data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# # view feedback endpoints
-# @api_view(['GET'])
-# def viewFeedback(request):
-#     try:
-#         teacher_feedback = Feedback.objects.all()
-#     except Feedback.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
+# view feedback endpoints
+@api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
+def viewFeedback(request):
+    try:
+        teacher_feedback = Feedback.objects.all()
+    except Feedback.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-#     if request.method == 'GET':
-#         serializer = FeedbackSerializer(teacher_feedback, many=True)
-#         return Response(serializer.data)
+    if request.method == 'GET':
+        serializer = FeedbackSerializer(teacher_feedback, many=True)
+        return Response(serializer.data)
 
 
 # Teachers endpoint
 # add teacher
 @api_view(['POST'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def add_teacher(request):
     if request.method == "POST":
         serializer = TeacherSerializer(data=request.data)
@@ -341,6 +389,8 @@ def add_teacher(request):
 
 # views teachers 
 @api_view(['GET'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([AllowAny])
 def view_teachers(request):
     teachers = Teachers.objects.all()
     serializer = TeacherSerializer(teachers, many=True)
@@ -349,6 +399,8 @@ def view_teachers(request):
 
 # update teachers
 @api_view(['PUT'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def update_teacher(request, id):
     try:
         teacher = Teachers.objects.get(pk=id)
@@ -364,6 +416,8 @@ def update_teacher(request, id):
     
 # delete teachers
 @api_view(['DELETE'])
+@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_teacher(request, id):
     try:
         teacher = Teachers.objects.get(pk=id)
@@ -379,7 +433,8 @@ def delete_teacher(request, id):
 # DEAR day
 # theme
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])  # Requires authentication
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([AllowAny])
 def viewTheme(request):
     themes = Theme.objects.all()
     serializer = ThemeSerializer(themes, many=True)
@@ -387,6 +442,8 @@ def viewTheme(request):
 
 
 @api_view(['POST'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def addTheme(request):
     serializer = ThemeSerializer(data=request.data)
     if serializer.is_valid():
@@ -395,6 +452,8 @@ def addTheme(request):
 
 
 @api_view(['GET'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([AllowAny])
 def getTheme(request, id):
     try:
         theme = Theme.objects.get(pk=id)
@@ -407,6 +466,8 @@ def getTheme(request, id):
 
 
 @api_view(['PUT'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def updateTheme(request, id):
     try:
         theme = Theme.objects.get(pk=id)
@@ -422,6 +483,8 @@ def updateTheme(request, id):
 
 
 @api_view(['DELETE'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def deleteTheme(request, id):
     try:
         theme = Theme.objects.get(pk=id)
@@ -431,8 +494,11 @@ def deleteTheme(request, id):
     theme.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # Sub theme
 @api_view(['POST'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def addSubTheme(request):
     serializer = SubThemeSerializer(data=request.data)
     if serializer.is_valid():
@@ -441,6 +507,8 @@ def addSubTheme(request):
 
 
 @api_view(['GET'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([AllowAny])
 def viewSubTheme(request, pk):
     try:
         sub_theme = Sub_Theme.objects.filter(theme_id=pk)
@@ -453,6 +521,8 @@ def viewSubTheme(request, pk):
 
 
 @api_view(['GET'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([AllowAny])
 def getSubTheme(request, id):
     try:
         sub_theme = Sub_Theme.objects.get(pk=id)
@@ -465,6 +535,8 @@ def getSubTheme(request, id):
 
 
 @api_view(['PUT'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def updateSubTheme(request, id):
     try:
         sub_theme = Sub_Theme.objects.get(pk=id)
@@ -480,6 +552,8 @@ def updateSubTheme(request, id):
 
 
 @api_view(['DELETE'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def deleteSubTheme(request, id):
     try:
         sub_theme = Sub_Theme.objects.get(pk=id)
@@ -492,6 +566,8 @@ def deleteSubTheme(request, id):
 
 # Chapter endpoints
 @api_view(['POST'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def addChapter(request):
     serializer = ChapterSerialzer(data=request.data)
     if serializer.is_valid():
@@ -500,6 +576,8 @@ def addChapter(request):
 
 
 @api_view(['GET'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([AllowAny])
 def getChapter(request, id):
     try:
         chapter = Chapters.objects.get(pk=id)
@@ -512,6 +590,8 @@ def getChapter(request, id):
 
 
 @api_view(['GET'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([AllowAny])
 def viewChapters(request, pk):
     try:
         chapters = Chapters.objects.filter(sub_theme_id=pk).select_related('sub_theme__theme')
@@ -524,6 +604,8 @@ def viewChapters(request, pk):
 
 
 @api_view(['PUT'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def updateChapter(request, id):
     try:
         chapter = Chapters.objects.get(pk=id)
@@ -538,6 +620,8 @@ def updateChapter(request, id):
 
 
 @api_view(['DELETE'])
+#@authentication_classes([CustomTokenAuthentication, TokenAuthentication, SessionAuthentication])
+#@permission_classes([IsAuthenticated])
 def deleteChapter(request, id):
     try:
         chapters = Chapters.objects.get(pk=id)

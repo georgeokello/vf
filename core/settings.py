@@ -152,10 +152,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+CUSTOM_AUTH_TOKEN = 'virtual_app_token'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
+        "api.authentication.CustomTokenAuthentication",  # Path to your authentication class
     ),
 }
+
 
 

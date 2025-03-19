@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from baseApp.models import FundiUser, Topic, Session, Activity, Teachers, Profile
+from baseApp.models import FundiUser, Topic, Session, Activity, Teachers, Profile, Feedback
 from baseApp.models import Theme, Sub_Theme, Chapters
 
 
@@ -61,10 +61,10 @@ class TeacherSerializer(serializers.ModelSerializer):
 #         model = VideoActivity
 #         fields = "__all__"
 
-# class FeedbackSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Feedback
-#         fields = "__all__"
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = "__all__"
 
 
 # DEAR day

@@ -101,6 +101,39 @@ class Teachers(models.Model):
     phoneName = models.CharField(max_length=200, default="")
 
 
+class Feedback(models.Model):
+    # Basic fields
+    teacherId = models.IntegerField(blank=True, default=None)
+    teacherName = models.CharField(max_length=255, default="")
+    schoolName = models.CharField(max_length=255, default="")
+    classStream = models.CharField(max_length=255, default="")
+    topicCovered = models.CharField(max_length=255, default="")
+    sessionCovered = models.CharField(max_length=255, default="")
+    frequency = models.CharField(max_length=255, default="")
+    easeOfUse = models.CharField(max_length=255, default="")
+    digitalContentUsefulnes= models.CharField(max_length=255, default="")
+    prepTimeSaved= models.CharField(max_length=255, default="") 
+    effectivenessOfIntruc= models.CharField(max_length=255, default="")
+
+    # Nested JSON-like fields (video content ratings)
+    videoContentRatings=models.CharField(max_length=500, default="")
+    escVideoHelpfulness = models.CharField(max_length=255, default="")
+    confidenceInESC = models.CharField(max_length=255, default="")
+    escVideoPreparation = models.CharField(max_length=255, default="")
+ 
+    # Overall satisfaction and other comments
+    overallSatisfaction = models.IntegerField(null=True, blank=True, default=None)
+    challenges = models.CharField(max_length=255, default="")
+    improvements = models.CharField(max_length=255, default="")
+    additionalComments = models.CharField(max_length=255, default="", null=True, blank=True,)
+
+    # Date of evaluation
+    evaluationDate = models.CharField(max_length=255, default="")
+
+    def __str__(self):
+        return f"Evaluation for {self.teacherName} ({self.teacherId}) - {self.schoolName}"
+
+
 # DEAR day 
 class Theme(models.Model):
     title =  models.CharField(max_length=200)
